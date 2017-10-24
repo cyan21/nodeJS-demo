@@ -1,0 +1,5 @@
+{
+             "directory": "app/bower_components",
+             "registry" : "http://jenkins:AKCp2VouvByHfvNzqdwsgqKU7o9HneAXZwjWaHAgm9YCemnWXgu23GMR9JjnTtCu7Rue8PmTw@yodafrog.sas.jfrog.internal/artifactory/api/bower/bower-dev",
+             "resolvers" : [ "bower-art-resolver" ]
+         }

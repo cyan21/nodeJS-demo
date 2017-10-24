@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html lang="en" ng-app="frogs" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html lang="en" ng-app="frogs" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html lang="en" ng-app="frogs" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="frogs" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My AngularJS App</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+    <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="app.css">
+    <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+
+    <link rel="stylesheet" href="jquery.simple-popup.min.css">
+    <link href="jquery.simple-popup.settings.css" rel="stylesheet" type="text/css" />
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="jquery.simple-popup.js"></script>
+    <style type="text/css">
+	#mydialog { display: none }
+    </style>
+</head>
+<body>
+
+
+<header class="banner navbar navbar-default navbar-static-top" role="banner">
+    <h2>
+        <img src="jfrog.png" />
+    </h2>
+</header>
+
+<div id="mydialog" title="Basic dialog">
+  <p>This is an animated dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+</div>
+ 
+
+<div class="container" ng-controller="FrogsController as vm">
+
+    <uib-carousel  no-wrap="noWrapSlides">
+        <uib-slide ng-repeat="frog in vm.frogs" active="frog.active">
+            <img ng-src="{{vm.wsBaseUrl}}/{{::frog.imageUrl}}" style="margin:auto;">
+            <div class="carousel-caption">
+                <h4>{{::frog.name}} ({{::frog.year}})</h4>
+                <p>{{::frog.quote}}</p>
+            </div>
+        </uib-slide>
+    </uib-carousel>
+
+    <footer class="footer">
+        frogsws version {{::vm.version}} <br/>
+        frogsui version {{::vm.uiVersion}}
+    </footer>
+
+</div>
+
+<script type="text/javascript">
+$( function() {
+    var options = {
+  	type: "html",
+  	htmlSelector: "#mydialog"
+    };
+
+    $.get("http://192.168.21.23:8081/getcontent", function(data, status){
+//        alert("Data: " + data + "\nStatus: " + status);
+	$("#mydialog").html(data);
+        $(this).simplePopup(options);
+    });
+
+});
+
+</script>
+
+
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="app.js"></script>
+<script src="components/version/version.js"></script>
+</body>
+</html>

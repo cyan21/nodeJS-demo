@@ -9,6 +9,8 @@ ultra simple Node module depending on quote-of-the-day module
 Unit test
 
 ```
+npm install chai --save-dev
+npm install mocha --save-dev
 npm test
 ```
 

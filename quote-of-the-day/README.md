@@ -9,7 +9,9 @@ returns the content of a specific file
 
 Unit test
 
-```
+``` 
+npm install chai --save-dev
+npm install mocha --save-dev
 npm test
 ```
 

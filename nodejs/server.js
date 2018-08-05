@@ -18,6 +18,10 @@ app.get('/listUsers2', function (req, res) {
   });
 })
 
+app.get('/ping', function (req, res) {
+   res.end("pong");
+})
+
 app.get('/:id', function (req, res) {
   fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
     var users = JSON.parse( data );
@@ -31,9 +35,9 @@ app.get('/:id', function (req, res) {
 var server = app.listen(8081, function () {
 
 //  var host = server.address().address
-  var host = "http://192.168.21.23" 
+  var host = "192.168.21.21" 
   var port = server.address().port
 
-  console.log("Example app listening at http://%s:%s", host, port)
+  console.log("Endpoint : http://%s:%s/listUsers2", host, port)
 
 })

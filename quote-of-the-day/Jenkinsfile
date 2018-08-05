@@ -1,0 +1,79 @@
+node {
+    
+    def vers = env.BUILD_NUMBER
+    def npm_module = "quote-of-the-day"
+
+    stage("Preparation") {
+        git "https://github.com/cyan21/nodeJS-demo.git"
+        sh "jfrog rt use ${params.ARTY_PROFILE}"
+    }
+
+   stage("Build & Publish") {
+       dir(npm_module) {
+           sh "npm version patch"
+//           vers = getVersion()
+           sh "jfrog rt npmi npm --build-name=${env.JOB_NAME} --build-number=$vers"
+           sh "jfrog rt npm-publish ${params.SRC_REPO} --build-name=${env.JOB_NAME} --build-number=$vers"
+           sh "jfrog rt bp ${env.JOB_NAME} $vers"
+       }
+   }
+
+
+    stage("Technical test") {
+        // call to my custom function (see below)
+        testApp()
+    }
+
+    stage("Promotion") {
+        promote_opts = "--status='Released' --comment='Passed technical tests' --include-dependencies=true --copy=true"
+        sh "jfrog rt bpr ${env.JOB_NAME} $vers ${params.PROMOTE_REPO} $promote_opts"
+    }
+    
+    stage("Scan build") {
+
+        if (params.SCAN_BUILD == true) {
+            
+            dir("quote-of-the-day") {
+                sh "jfrog rt bs ${env.JOB_NAME} $vers > $WORKSPACE/scan_build.json"
+                def scan_res = readJSON file: "$WORKSPACE/scan_build.json"
+                
+//            def nb =  scan_res.summary.total_alerts
+//            echo "nb of alerts : ${nb}"  
+                sh "cat $WORKSPACE/scan_build.json"
+            
+                if ( scan_res.fail_build == true && scan_res.summary.total_alerts != 0 ) { 
+                    // currentBuild.result = 'failure' 
+                    sh "echo current Build status : $currentBuild.currentResult"
+                    exit 1
+                }
+            }
+        } else {
+            echo  "[WARNING] Scan was disabled when running the job"
+        }
+    }
+
+    stage("Distribute to Bintray") {
+
+        if (params.DISTRIBUTION == true) {
+            sh "jfrog rt bd --override=true ${env.JOB_NAME} $vers ${DISTRIB_REPO} "
+        } else {
+            echo  "[WARNING] Distribution was disabled when running the job"
+        }
+    }
+
+}
+
+////////////////////////////////////////////////////
+/// FUNCTIONS
+////////////////////////////////////////////////////
+
+def getVersion() {
+    
+    def vers = "NA"
+    def pkg_json = readJSON file: "package.json"
+    return pkg_json['version']
+}
+ 
+def testApp() {
+    return true
+}

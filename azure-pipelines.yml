@@ -31,7 +31,7 @@ steps:
   inputs:
     command: 'custom'
     workingDir: 'quote-of-the-day'
-    customCommand: 'test'
+    customCommand: 'build'
     customRegistry: 'useFeed'
     customFeed: 'b12bb647-4093-4865-b118-ad904c9ead17'
 

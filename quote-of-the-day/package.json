@@ -1,6 +1,6 @@
 {
   "name": "quote-of-the-day",
-  "version": "0.0.6",
+  "version": "0.0.1",
   "description": "Quote of the day ",
   "main": "index.js",
   "scripts": {

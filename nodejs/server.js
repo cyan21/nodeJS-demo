@@ -1,13 +1,15 @@
 var express = require('express');
 var app = express();
 var fs = require("fs");
-var cotd = require("content-of-the-day"),
-    mycontent = cotd.get;
+/*
+ var cotd = require("content-of-the-day"),
+  mycontent = cotd.get;
 
 app.get('/getcontent', function (req, res) {
        console.log( mycontent() );
        res.end( mycontent() );
 })
+*/
 
 app.use(express.static('public'));
 
@@ -34,8 +36,8 @@ app.get('/:id', function (req, res) {
 
 var server = app.listen(8081, function () {
 
-//  var host = server.address().address
-  var host = "192.168.21.21" 
+  var host = server.address().address
+//  var host = "192.168.21.21" 
   var port = server.address().port
 
   console.log("Endpoint : http://%s:%s/listUsers2", host, port)
